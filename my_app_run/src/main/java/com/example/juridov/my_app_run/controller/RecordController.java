@@ -2,6 +2,7 @@ package com.example.juridov.my_app_run.controller;
 
 import com.example.juridov.my_app_run.entity.Record;
 import com.example.juridov.my_app_run.repository.RecordRepository;
+import com.example.juridov.my_app_run.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,38 +10,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/records")
 public class RecordController {
     @Autowired
-    private RecordRepository recordRepository;
+    private RecordService recordService;
 
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Record> getAllRecords() {
-        return recordRepository.findAll();
+        return recordService.getAllRecord();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public void addRecord(@RequestBody Record record) {
-        recordRepository.save(record);
+        recordService.addRecord(record);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateRecord(@RequestBody Record record, @PathVariable Long id) {
-        Record oldRecord = recordRepository.findRecordById(id);
-        if (record.getDistance() != null)
-            oldRecord.setDistance(record.getDistance());
-        if (record.getTime() != null)
-            oldRecord.setTime(record.getTime());
-        if (record.getDate() != null)
-            oldRecord.setDate(record.getDate());
-        recordRepository.save(oldRecord);
+        recordService.updateRecord(record, id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteRecord(@PathVariable Long id) {
-        Record record = recordRepository.findRecordById(id);
-        recordRepository.delete(record);
+        recordService.delete(id);
     }
 
     @RequestMapping(value = "/report", method = RequestMethod.GET)
-    public Iterable<Record> getReportOfRecords(){
+    public Iterable<Record> getReportOfRecords() {
         return null;
     }
 }

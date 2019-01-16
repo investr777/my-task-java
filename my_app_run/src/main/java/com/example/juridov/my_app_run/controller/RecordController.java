@@ -1,7 +1,6 @@
 package com.example.juridov.my_app_run.controller;
 
 import com.example.juridov.my_app_run.entity.Record;
-import com.example.juridov.my_app_run.repository.RecordRepository;
 import com.example.juridov.my_app_run.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +29,5 @@ public class RecordController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteRecord(@PathVariable Long id) {
         recordService.delete(id);
-    }
-
-    @RequestMapping(value = "/report", method = RequestMethod.GET)
-    public Iterable<Record> getReportOfRecords() {
-        return null;
     }
 }

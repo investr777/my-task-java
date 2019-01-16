@@ -27,16 +27,6 @@ public class Record {
     @Column(name = "user_id")
     private Long user_id;
 
-    public Record() {
-    }
-
-    public Record(Integer distance, Integer time, Long date, Long user_id) {
-        this.distance = distance;
-        this.time = time;
-        this.date = date;
-        this.user_id = user_id;
-    }
-
     public Long getId() {
         return id;
     }

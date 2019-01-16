@@ -36,7 +36,6 @@ public class RecordService {
     }
 
     public void delete(Long id) {
-        Record record = recordRepository.findRecordById(id);
-        recordRepository.delete(record);
+        recordRepository.delete(recordRepository.findRecordById(id));
     }
 }

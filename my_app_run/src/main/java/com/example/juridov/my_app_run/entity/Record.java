@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Entity
 @JsonAutoDetect
@@ -23,7 +22,7 @@ public class Record {
     private Integer time;
 
     @Column(name = "date")
-    private Date date;
+    private Long date;
 
     @Column(name = "user_id")
     private Long user_id;
@@ -31,7 +30,7 @@ public class Record {
     public Record() {
     }
 
-    public Record(Integer distance, Integer time, Date date, Long user_id) {
+    public Record(Integer distance, Integer time, Long date, Long user_id) {
         this.distance = distance;
         this.time = time;
         this.date = date;
@@ -62,11 +61,11 @@ public class Record {
         this.time = time;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

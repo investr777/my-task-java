@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @JsonAutoDetect
@@ -48,7 +49,6 @@ public class Record {
     }
 
     public void setTime(Integer time) {
-        //TODO : подумать стоит ли переделать на миллисекунды
         this.time = time;
     }
 
@@ -57,8 +57,13 @@ public class Record {
     }
 
     public void setDate(Long date) {
-        //TODO : clear seconds, hours ant other
-        this.date = date;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+        this.date = calendar.getTimeInMillis();
     }
 
     public Long getUserId() {

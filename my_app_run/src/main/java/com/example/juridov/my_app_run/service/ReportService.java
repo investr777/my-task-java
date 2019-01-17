@@ -6,6 +6,8 @@ import com.example.juridov.my_app_run.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -33,16 +35,13 @@ public class ReportService {
                 totalDistance += record.getDistance();
             }
             Report report = new Report();
-            report.setAvSpeed(avSpeed / records.size());
+            report.setAvSpeed(round(avSpeed / records.size()));
             report.setAvTime(avTime / records.size());
             report.setTotalDistance(totalDistance);
             report.setWeekNumber(entry.getKey());
             //TODO : REVIEW!!!
             calendar.setTimeInMillis(records.get(0).getDate());
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.clear(Calendar.MINUTE);
-            calendar.clear(Calendar.SECOND);
-            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(Calendar.HOUR, 3);
             calendar.setFirstDayOfWeek(Calendar.MONDAY);
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
             report.setWeekStart(calendar.getTimeInMillis());
@@ -65,6 +64,10 @@ public class ReportService {
         Map<Integer, List<Record>> result = new HashMap<>();
         map.forEach((record, weekNumber) -> result.computeIfAbsent(weekNumber, (k) -> new ArrayList<Record>()).add(record));
         return result;
+    }
+
+    private double round(double number){
+        return new BigDecimal(number).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 }

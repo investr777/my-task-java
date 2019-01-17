@@ -40,18 +40,41 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         long user2Id = userRepository.save(user2).getId();
 
         //Add records for first user
-        Record record = new Record();
-        record.setUserId(user1Id);
-        record.setDate(System.currentTimeMillis());
-        record.setTime(6);
-        record.setDistance(1000);
-        recordRepository.save(record);
-        record.setId(0L);
-        recordRepository.save(record);
-        record.setId(0L);
-        recordRepository.save(record);
+        Record record1 = new Record();
+        record1.setUserId(user1Id);
+        record1.setDate(System.currentTimeMillis());
+        record1.setTime(3);
+        record1.setDistance(1000);
+        recordRepository.save(record1);
 
-        //TODO : добавить нормальнх двнных
+        Record record2 = new Record();
+        record2.setUserId(user1Id);
+        record2.setDate(System.currentTimeMillis());
+        record2.setTime(13);
+        record2.setDistance(3000);
+        recordRepository.save(record2);
+
+        //Add records for second user
+        Record record3 = new Record();
+        record3.setUserId(user2Id);
+        record3.setDate(System.currentTimeMillis());
+        record3.setTime(7);
+        record3.setDistance(2000);
+        recordRepository.save(record3);
+
+        Record record4 = new Record();
+        record4.setUserId(user2Id);
+        record4.setDate(System.currentTimeMillis());
+        record4.setTime(20);
+        record4.setDistance(5000);
+        recordRepository.save(record4);
+
+        Record record5 = new Record();
+        record5.setUserId(user2Id);
+        record5.setDate(System.currentTimeMillis());
+        record5.setTime(2);
+        record5.setDistance(1000);
+        recordRepository.save(record5);
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/records", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(value = "Record API", description = "Record REST API")
+@Api(value = "Record API", description = "Record REST Controller API, CRUD records")
 public class RecordController {
     private final RecordService recordService;
 
@@ -21,24 +21,27 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @ApiOperation(value = "Get all user records", response = Record.class)
+    @ApiOperation(value = "Get all records of the user", response = Record.class)
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Record> getAllRecords(@AuthenticationPrincipal User user) {
         return recordService.getRecordsOfUser(user.getId());
     }
 
+    @ApiOperation(value = "Create a new record of the user", response = Record.class)
     @RequestMapping(method = RequestMethod.POST)
     public void addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
         recordService.addRecord(record, user.getId());
     }
 
+    @ApiOperation(value = "Edit a record of the user", response = Record.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateRecord(@RequestBody Record record, @PathVariable Long recordId) {
         recordService.updateRecord(record, recordId);
     }
 
+    @ApiOperation(value = "Delete a record of the user", response = Record.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteRecord(@PathVariable Long id) {
-        recordService.delete(id);
+    public void deleteRecord(@PathVariable Long recordId) {
+        recordService.delete(recordId);
     }
 }

@@ -15,11 +15,10 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     public void addUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null){
+            return;
+        }
         userRepository.save(user);
-    }
-
-    public User findByName(String name){
-        return userRepository.findByUsername(name);
     }
 
     @Override

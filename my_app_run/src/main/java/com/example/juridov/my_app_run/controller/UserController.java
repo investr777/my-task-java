@@ -12,12 +12,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/add")
+    @PostMapping(path = "/registration")
     public void addUser(@RequestBody User user) {
-        User userFromDB = userService.findByName(user.getUsername());
-        if (userFromDB != null){
-            return;
-        }
         userService.addUser(user);
     }
 }

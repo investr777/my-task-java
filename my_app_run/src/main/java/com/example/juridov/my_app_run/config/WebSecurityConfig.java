@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static String REALM = "MY_TEST_REALM";
 
     @Autowired
     private UserService userService;
@@ -25,19 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(User.PASSWORD_ENCODER);
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication().withUser("bill").password("{noop}abc123").roles("ADMIN");
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers("/", "/registration").permitAll()
+                .anyRequest().authenticated();
 
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/user/**").hasRole("ADMIN")
-                .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//We don't need sessions to be created.
+        http.httpBasic().authenticationEntryPoint(getBasicAuthEntryPoint());
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean

@@ -13,8 +13,8 @@ public class ReportService {
     @Autowired
     private RecordRepository recordRepository;
 
-    private Map<Integer, List<Record>> getRecordsOfWeeks() {
-        List<Record> recordList = recordRepository.findAll();
+    private Map<Integer, List<Record>> getRecordsOfWeeks(Long id) {
+        List<Record> recordList = recordRepository.findAllByUserId(id);
         Map<Record, Integer> map = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
 
@@ -29,11 +29,11 @@ public class ReportService {
         return result;
     }
 
-    public List<Report> getReportOfRecords() {
+    public List<Report> getReportOfRecords(Long id) {
         Double avSpeed = 0.0;
         Double avTime = 0.0;
         Integer totalDistance = 0;
-        Map<Integer, List<Record>> map = getRecordsOfWeeks();
+        Map<Integer, List<Record>> map = getRecordsOfWeeks(id);
         List<Report> reportList = new ArrayList<>();
         for (Map.Entry<Integer, List<Record>> entry : map.entrySet()) {
             List<Record> records = entry.getValue();

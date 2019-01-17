@@ -5,6 +5,8 @@ import com.example.juridov.my_app_run.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class RecordService {
     @Autowired
@@ -40,5 +42,10 @@ public class RecordService {
             return;
         }
         recordRepository.delete(recordRepository.findRecordById(id));
+    }
+
+    public Iterable<Record> getRecordsOfUser(Long id){
+//        Set<Record> records = getAllRecord();
+        return recordRepository.findAllByUserId(id);
     }
 }

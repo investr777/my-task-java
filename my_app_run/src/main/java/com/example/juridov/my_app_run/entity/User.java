@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -28,17 +27,6 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
-
-//    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER)
-//    private Set<Record> records;
-//
-//    public Set<Record> getRecords() {
-//        return records;
-//    }
-//
-//    public void setRecords(Set<Record> records) {
-//        this.records = records;
-//    }
 
     public Long getId() {
         return id;

@@ -27,16 +27,6 @@ public class Record {
     @Column(name = "user_id")
     private Long userId;
 
-    public Record() {
-    }
-
-    public Record(Integer distance, Integer time, Long date, Long userId) {
-        this.distance = distance;
-        this.time = time;
-        this.date = date;
-        this.userId = userId;
-    }
-
     public Long getId() {
         return id;
     }
@@ -58,6 +48,7 @@ public class Record {
     }
 
     public void setTime(Integer time) {
+        //TODO : подумать стоит ли переделать на миллисекунды
         this.time = time;
     }
 
@@ -66,6 +57,7 @@ public class Record {
     }
 
     public void setDate(Long date) {
+        //TODO : clear seconds, hours ant other
         this.date = date;
     }
 

@@ -1,7 +1,7 @@
 package com.example.juridov.my_app_run.controller;
 
 import com.example.juridov.my_app_run.entity.User;
-import com.example.juridov.my_app_run.report.Report;
+import com.example.juridov.my_app_run.entity.report.Report;
 import com.example.juridov.my_app_run.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,11 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/report", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReportController {
-    @Autowired
-    private ReportService reportService;
+    private final ReportService reportService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @Autowired
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @RequestMapping(value = "/by_weeks", method = RequestMethod.GET)
     public List<Report> getRecordsOfWeeks(@AuthenticationPrincipal User user) {
-       return reportService.getReportOfRecords(user.getId());
+        return reportService.getReportOfRecords(user.getId());
     }
 }

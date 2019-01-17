@@ -3,6 +3,8 @@ package com.example.juridov.my_app_run.controller;
 import com.example.juridov.my_app_run.entity.Record;
 import com.example.juridov.my_app_run.entity.User;
 import com.example.juridov.my_app_run.service.RecordService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,10 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/records", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "Record API", description = "Record REST API")
 public class RecordController {
-    @Autowired
-    private RecordService recordService;
+    private final RecordService recordService;
 
+    @Autowired
+    public RecordController(RecordService recordService) {
+        this.recordService = recordService;
+    }
+
+    @ApiOperation(value = "Get all user records", response = Record.class)
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Record> getAllRecords(@AuthenticationPrincipal User user) {
         return recordService.getRecordsOfUser(user.getId());
@@ -25,8 +33,8 @@ public class RecordController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void updateRecord(@RequestBody Record record, @PathVariable Long id) {
-        recordService.updateRecord(record, id);
+    public void updateRecord(@RequestBody Record record, @PathVariable Long recordId) {
+        recordService.updateRecord(record, recordId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

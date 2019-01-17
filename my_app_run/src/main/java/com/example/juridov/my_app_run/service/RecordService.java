@@ -5,20 +5,19 @@ import com.example.juridov.my_app_run.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
 public class RecordService {
-    @Autowired
-    RecordRepository recordRepository;
 
-    public Iterable<Record> getAllRecord() {
-        return recordRepository.findAll();
+    private final RecordRepository recordRepository;
+
+    @Autowired
+    public RecordService(RecordRepository recordRepository) {
+        this.recordRepository = recordRepository;
     }
 
     public void addRecord(Record record, Long userId) {
-        Record recordToDB = new Record(record.getDistance(), record.getTime(), record.getDate(), userId);
-        recordRepository.save(recordToDB);
+        record.setUserId(userId);
+        recordRepository.save(record);
     }
 
     public void updateRecord(Record record, Long id) {
@@ -39,10 +38,11 @@ public class RecordService {
     }
 
     public void delete(Long id) {
-        if (recordRepository.findRecordById(id) == null) {
+        Record recordFromDB = recordRepository.findRecordById(id);
+        if (recordFromDB == null) {
             return;
         }
-        recordRepository.delete(recordRepository.findRecordById(id));
+        recordRepository.delete(recordFromDB);
     }
 
     public Iterable<Record> getRecordsOfUser(Long id) {

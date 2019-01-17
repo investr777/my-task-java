@@ -16,8 +16,9 @@ public class RecordService {
         return recordRepository.findAll();
     }
 
-    public void addRecord(Record record) {
-        recordRepository.save(record);
+    public void addRecord(Record record, Long userId) {
+        Record recordToDB = new Record(record.getDistance(), record.getTime(), record.getDate(), userId);
+        recordRepository.save(recordToDB);
     }
 
     public void updateRecord(Record record, Long id) {
@@ -38,14 +39,13 @@ public class RecordService {
     }
 
     public void delete(Long id) {
-        if (recordRepository.findRecordById(id) == null){
+        if (recordRepository.findRecordById(id) == null) {
             return;
         }
         recordRepository.delete(recordRepository.findRecordById(id));
     }
 
-    public Iterable<Record> getRecordsOfUser(Long id){
-//        Set<Record> records = getAllRecord();
+    public Iterable<Record> getRecordsOfUser(Long id) {
         return recordRepository.findAllByUserId(id);
     }
 }

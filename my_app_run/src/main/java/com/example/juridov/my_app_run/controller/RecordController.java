@@ -21,7 +21,7 @@ public class RecordController {
 
     @RequestMapping(method = RequestMethod.POST)
     public void addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
-        recordService.addRecord(record);
+        recordService.addRecord(record, user.getId());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)

@@ -23,7 +23,7 @@ public class ReportService {
     public List<Report> getReportOfRecords(Long id) {
         Map<Integer, List<Record>> map = getRecordsOfWeeks(id);
         List<Report> reportList = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         for (Map.Entry<Integer, List<Record>> entry : map.entrySet()) {
             double avSpeed = 0.0;
             double avTime = 0.0;
@@ -39,9 +39,8 @@ public class ReportService {
             report.setAvTime(avTime / records.size());
             report.setTotalDistance(totalDistance);
             report.setWeekNumber(entry.getKey());
-            //TODO : REVIEW!!!
             calendar.setTimeInMillis(records.get(0).getDate());
-            calendar.set(Calendar.HOUR, 3);
+            calendar.set(Calendar.HOUR, 0);
             calendar.setFirstDayOfWeek(Calendar.MONDAY);
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
             report.setWeekStart(calendar.getTimeInMillis());
@@ -66,7 +65,7 @@ public class ReportService {
         return result;
     }
 
-    private double round(double number){
+    private double round(double number) {
         return new BigDecimal(number).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 

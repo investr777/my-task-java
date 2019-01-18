@@ -34,13 +34,13 @@ public class RecordController {
     }
 
     @ApiOperation(value = "Edit a record of the user", response = Record.class)
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{recordId}", method = RequestMethod.PUT)
     public void updateRecord(@RequestBody Record record, @PathVariable Long recordId) {
         recordService.updateRecord(record, recordId);
     }
 
     @ApiOperation(value = "Delete a record of the user", response = Record.class)
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{recordId}", method = RequestMethod.DELETE)
     public void deleteRecord(@PathVariable Long recordId) {
         recordService.delete(recordId);
     }

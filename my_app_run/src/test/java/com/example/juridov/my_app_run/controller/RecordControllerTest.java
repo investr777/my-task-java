@@ -11,10 +11,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -29,6 +26,8 @@ public class RecordControllerTest {
 
     @Autowired
     private TestRestTemplate template;
+
+    HttpHeaders headers = new HttpHeaders();
 
     @Test
     public void getAllRecordsOfUSerWithHttpStatus() {
@@ -60,15 +59,28 @@ public class RecordControllerTest {
     }
 
 
+//    @Test
+//    public void addRecord() {
+//        Record record = new Record();
+//        record.setDate(System.currentTimeMillis());
+//        record.setTime(3);
+//        record.setDistance(1000);
+//        ResponseEntity<Record> result = template.withBasicAuth("user1", "123")
+//                .postForEntity("/records", record, Record.class);
+//        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
+//    }
+
     @Test
     public void addRecord() {
         Record record = new Record();
         record.setDate(System.currentTimeMillis());
-        record.setTime(3);
-        record.setDistance(1000);
-        ResponseEntity<Record> result = template.withBasicAuth("user1", "123")
-                .postForEntity("/records", record, Record.class);
-        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
+        record.setTime(7);
+        record.setDistance(777);
+        HttpEntity<Record> entity = new HttpEntity(record, headers);
+        ResponseEntity<String> response = template.withBasicAuth("user1", "123")
+                .exchange("/records", HttpMethod.POST, entity, String.class);
+        String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
+        Assert.assertTrue(actual.contains("/records"));
     }
 
     @Test
@@ -84,6 +96,7 @@ public class RecordControllerTest {
     @Test
     public void deleteRecord() {
         template.withBasicAuth("user1", "123")
-                .delete("/records/{recordId}", 1);
+                .delete("/records/{recordId}", 9);
     }
+
 }

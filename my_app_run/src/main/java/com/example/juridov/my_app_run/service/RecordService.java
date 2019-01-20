@@ -15,10 +15,9 @@ public class RecordService {
         this.recordRepository = recordRepository;
     }
 
-    public Record addRecord(Record record, Long userId) {
+    public void addRecord(Record record, Long userId) {
         record.setUserId(userId);
         recordRepository.save(record);
-        return record;
     }
 
     public void updateRecord(Record record, Long recordId) {

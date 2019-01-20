@@ -74,5 +74,4 @@ public class Record {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
 }

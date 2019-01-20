@@ -1,10 +1,11 @@
 package com.example.juridov.my_app_run.controller;
 
 import com.example.juridov.my_app_run.entity.Record;
+import com.example.juridov.my_app_run.repository.RecordRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -17,8 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -27,13 +27,21 @@ public class RecordControllerTest {
     @Autowired
     private TestRestTemplate template;
 
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @After
+    public void resetDb() {
+        recordRepository.deleteAll();
+    }
+
     HttpHeaders headers = new HttpHeaders();
 
     @Test
     public void getAllRecordsOfUSerWithHttpStatus() {
         ResponseEntity<String> result = template.withBasicAuth("user1", "123")
                 .getForEntity("/records", String.class);
-        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -54,49 +62,48 @@ public class RecordControllerTest {
         record2.setDistance(3000);
         expected.add(record2);
         ObjectMapper mapper = new ObjectMapper();
-        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
         JSONAssert.assertEquals(mapper.writeValueAsString(expected), result.getBody(), false);
     }
 
 
-//    @Test
-//    public void addRecord() {
-//        Record record = new Record();
-//        record.setDate(System.currentTimeMillis());
-//        record.setTime(3);
-//        record.setDistance(1000);
-//        ResponseEntity<Record> result = template.withBasicAuth("user1", "123")
-//                .postForEntity("/records", record, Record.class);
-//        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
-//    }
-
     @Test
     public void addRecord() {
         Record record = new Record();
+        record.setId(6L);
         record.setDate(System.currentTimeMillis());
         record.setTime(7);
-        record.setDistance(777);
+        record.setDistance(999);
+        record.setUserId(1L);
         HttpEntity<Record> entity = new HttpEntity(record, headers);
-        ResponseEntity<String> response = template.withBasicAuth("user1", "123")
+        ResponseEntity<String> result = template.withBasicAuth("user1", "123")
                 .exchange("/records", HttpMethod.POST, entity, String.class);
-        String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
-        Assert.assertTrue(actual.contains("/records"));
+        Record recordFromDb = recordRepository.findRecordById(6L);
+        assertEquals(recordFromDb.getId(), record.getId());
+        assertEquals(recordFromDb.getTime(), record.getTime());
+        assertEquals(recordFromDb.getDistance(), record.getDistance());
+        assertEquals(recordFromDb.getDate(), record.getDate());
+        assertEquals(recordFromDb.getUserId(), record.getUserId());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
     public void updateRecord() {
         Record record = new Record();
-        record.setDate(1546300800000L);
+        record.setDate(1516300800000L);
         HttpEntity<Record> entity = new HttpEntity(record);
         ResponseEntity<Record> result = template.withBasicAuth("user1", "123")
                 .exchange("/records/{recordId}", HttpMethod.PUT, entity, Record.class, 1);
-        assertThat(result.getStatusCode(), is(HttpStatus.OK));
+        Record recordFromDb = recordRepository.findRecordById(1L);
+        assertEquals(recordFromDb.getDate(), record.getDate());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
     public void deleteRecord() {
         template.withBasicAuth("user1", "123")
-                .delete("/records/{recordId}", 9);
+                .delete("/records/{recordId}", 1);
+        assertEquals(recordRepository.findRecordById(1L), null);
     }
 
 }

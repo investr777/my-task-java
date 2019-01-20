@@ -7,12 +7,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/records", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,13 +29,8 @@ public class RecordController {
 
     @ApiOperation(value = "Create a new record of the user", response = Record.class)
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
-        Record recordToDB = recordService.addRecord(record, user.getId());
-        if (recordToDB == null) {
-            return ResponseEntity.noContent().build();
-        }
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(recordToDB.getId()).toUri();
-        return ResponseEntity.created(location).build();
+    public void addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
+        recordService.addRecord(record, user.getId());
     }
 
     @ApiOperation(value = "Edit a record of the user", response = Record.class)

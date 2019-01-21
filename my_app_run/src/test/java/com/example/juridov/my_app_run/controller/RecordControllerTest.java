@@ -5,7 +5,6 @@ import com.example.juridov.my_app_run.repository.RecordRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -30,37 +28,13 @@ public class RecordControllerTest {
     @Autowired
     private RecordRepository recordRepository;
 
-    @After
-    public void resetDb() {
-        recordRepository.deleteAll();
-    }
-
     HttpHeaders headers = new HttpHeaders();
 
     @Test
-    public void getAllRecordsOfUSerWithHttpStatus() {
+    public void getAllRecordsOfUserWithListRecords() throws JsonProcessingException, JSONException {
         ResponseEntity<String> result = template.withBasicAuth("user1", "123")
                 .getForEntity("/records", String.class);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-    }
-
-    @Test
-    public void getAllRecordsOfUSerWithListRecords() throws JsonProcessingException, JSONException {
-        ResponseEntity<String> result = template.withBasicAuth("user1", "123")
-                .getForEntity("/records", String.class);
-        List<Record> expected = new ArrayList<>();
-        Record record1 = new Record();
-        record1.setUserId(1L);
-        record1.setDate(System.currentTimeMillis());
-        record1.setTime(3);
-        record1.setDistance(1000);
-        expected.add(record1);
-        Record record2 = new Record();
-        record2.setUserId(1L);
-        record2.setDate(System.currentTimeMillis());
-        record2.setTime(13);
-        record2.setDistance(3000);
-        expected.add(record2);
+        List<Record> expected = recordRepository.findAllByUserId(1L);
         ObjectMapper mapper = new ObjectMapper();
         assertEquals(HttpStatus.OK, result.getStatusCode());
         JSONAssert.assertEquals(mapper.writeValueAsString(expected), result.getBody(), false);

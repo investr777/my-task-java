@@ -20,8 +20,8 @@ public class ReportService {
         this.recordRepository = recordRepository;
     }
 
-    public List<Report> getReportOfRecords(Long id) {
-        Map<Integer, List<Record>> map = getRecordsOfWeeks(id);
+    public List<Report> getReportOfRecords(Long userId) {
+        Map<Integer, List<Record>> map = getRecordsOfWeeks(userId);
         List<Report> reportList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         for (Map.Entry<Integer, List<Record>> entry : map.entrySet()) {
@@ -51,8 +51,8 @@ public class ReportService {
         return reportList;
     }
 
-    private Map<Integer, List<Record>> getRecordsOfWeeks(Long id) {
-        List<Record> recordList = recordRepository.findAllByUserId(id);
+    private Map<Integer, List<Record>> getRecordsOfWeeks(Long userId) {
+        List<Record> recordList = recordRepository.findAllByUserId(userId);
         Map<Record, Integer> map = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
 

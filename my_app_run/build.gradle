@@ -23,6 +23,11 @@ sourceCompatibility = '1.8'
 
 mainClassName = "com.example.juridov.my_app_run.MyAppRunApplication"
 
+task runApp(type: JavaExec) {
+    main = "-jar";
+    args "build/libs/runApp-1.0.1-SNAPSHOT.jar"
+}
+
 bootJar {
     enabled=true
     baseName = 'runApp'

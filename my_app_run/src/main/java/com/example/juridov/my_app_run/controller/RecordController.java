@@ -21,6 +21,12 @@ public class RecordController {
         this.recordService = recordService;
     }
 
+    @ApiOperation(value = "Get record by ID of the user", response = Record.class)
+    @RequestMapping(value = "/{recordId}", method = RequestMethod.GET)
+    public Record getRecordId(@PathVariable Long recordId) {
+        return recordService.getRecordId(recordId);
+    }
+
     @ApiOperation(value = "Get all records of the user", response = Record.class)
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Record> getAllRecords(@AuthenticationPrincipal User user) {
@@ -29,14 +35,14 @@ public class RecordController {
 
     @ApiOperation(value = "Create a new record of the user", response = Record.class)
     @RequestMapping(method = RequestMethod.POST)
-    public void addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
-        recordService.addRecord(record, user.getId());
+    public Record addRecord(@AuthenticationPrincipal User user, @RequestBody Record record) {
+        return recordService.addRecord(record, user.getId());
     }
 
     @ApiOperation(value = "Edit a record of the user", response = Record.class)
     @RequestMapping(value = "/{recordId}", method = RequestMethod.PUT)
-    public void updateRecord(@RequestBody Record record, @PathVariable Long recordId) {
-        recordService.updateRecord(record, recordId);
+    public Record updateRecord(@RequestBody Record record, @PathVariable Long recordId) {
+        return recordService.updateRecord(record, recordId);
     }
 
     @ApiOperation(value = "Delete a record of the user", response = Record.class)

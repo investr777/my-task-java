@@ -15,15 +15,24 @@ public class RecordService {
         this.recordRepository = recordRepository;
     }
 
-    public void addRecord(Record record, Long userId) {
-        record.setUserId(userId);
-        recordRepository.save(record);
+    public Record getRecordId(Long recordId) {
+        Record recordFromDB = recordRepository.findRecordById(recordId);
+        if (recordFromDB ==null){
+            return null;
+        } else {
+            return recordFromDB;
+        }
     }
 
-    public void updateRecord(Record record, Long recordId) {
+    public Record addRecord(Record record, Long userId) {
+        record.setUserId(userId);
+        return recordRepository.save(record);
+    }
+
+    public Record updateRecord(Record record, Long recordId) {
         Record recordFromDB = recordRepository.findRecordById(recordId);
         if (recordFromDB == null) {
-            return;
+            return null;
         }
         if (record.getDistance() != null) {
             recordFromDB.setDistance(record.getDistance());
@@ -34,7 +43,7 @@ public class RecordService {
         if (record.getDate() != null) {
             recordFromDB.setDate(record.getDate());
         }
-        recordRepository.save(recordFromDB);
+        return recordRepository.save(recordFromDB);
     }
 
     public void delete(Long recordId) {

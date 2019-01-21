@@ -21,9 +21,9 @@ group = 'com.example.juridov'
 version = '1.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+mainClassName = "com.example.juridov.my_app_run.MyAppRunApplication"
 
 bootJar {
-    mainClassName = "com.example.juridov.my_app_run.MyAppRunApplication"
     enabled=true
     baseName = 'runApp'
 

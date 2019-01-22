@@ -24,7 +24,7 @@ public class RecordController {
     @ApiOperation(value = "Get record by ID of the user", response = Record.class)
     @RequestMapping(value = "/{recordId}", method = RequestMethod.GET)
     public Record getRecordId(@PathVariable Long recordId) {
-        return recordService.getRecordId(recordId);
+        return recordService.getRecordById(recordId);
     }
 
     @ApiOperation(value = "Get all records of the user", response = Record.class)

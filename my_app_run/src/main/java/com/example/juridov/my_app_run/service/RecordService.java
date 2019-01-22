@@ -15,13 +15,8 @@ public class RecordService {
         this.recordRepository = recordRepository;
     }
 
-    public Record getRecordId(Long recordId) {
-        Record recordFromDB = recordRepository.findRecordById(recordId);
-        if (recordFromDB ==null){
-            return null;
-        } else {
-            return recordFromDB;
-        }
+    public Record getRecordById(Long recordId) {
+        return recordRepository.findRecordById(recordId);
     }
 
     public Record addRecord(Record record, Long userId) {
